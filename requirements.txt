@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+pydantic-settings
+httpx
+websockets
+structloggroq
+elevenlabs
+cartesia[websockets]
+pipecat-ai
+pyaudio
+twilio

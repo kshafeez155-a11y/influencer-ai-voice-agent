@@ -1,0 +1,25 @@
+# Environment secrets
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Logs and generated audio
+logs/
+output/
+*.wav
+*.mp3
+*.ogg
+
+# IDE and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

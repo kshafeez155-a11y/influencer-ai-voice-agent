@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore TAC Voice demo creators and choose who you want to hear from.">
+  <meta name="theme-color" content="#F7F8FA">
+  <title>Explore creators — TAC Voice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public.css">
+</head>
+<body data-public-page="directory">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="shell nav-shell">
+      <a class="wordmark" href="index.html" aria-label="TAC Voice home"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="influencers.html" aria-current="page">Explore creators</a>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="for-creators.html">For creators</a>
+      </nav>
+      <a class="nav-action" href="index.html">Home</a>
+    </div>
+  </header>
+
+  <main id="main" class="directory-page shell">
+    <div class="directory-heading">
+      <div>
+        <p class="section-context">Demo creator lineup</p>
+        <h1>Who do you want to hear from?</h1>
+        <p>Choose a conversation that feels useful, fun, or just a little unexpected.</p>
+      </div>
+      <span class="creator-count" id="voice-count" aria-live="polite">Loading creators…</span>
+    </div>
+
+    <div class="search-wrap">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+      <label class="sr-only" for="search-input">Search creators</label>
+      <input id="search-input" type="search" autocomplete="off" placeholder="Search creators">
+      <button id="search-clear" class="search-clear" type="button" aria-label="Clear search" hidden>Clear</button>
+    </div>
+
+    <div class="directory-result-line" aria-live="polite" id="directory-result-line">Showing everyone</div>
+    <section class="directory-grid" id="voice-list" aria-label="Creators">
+      <div class="creator-card skeleton-card"></div>
+      <div class="creator-card skeleton-card"></div>
+      <div class="creator-card skeleton-card"></div>
+    </section>
+
+    <section class="empty-state" id="directory-empty" hidden>
+      <div class="empty-avatar" aria-hidden="true">?</div>
+      <h2>No creator matched that search.</h2>
+      <p>Try a name, topic, or a shorter phrase.</p>
+      <button class="button button-secondary" id="empty-clear" type="button">Show everyone</button>
+    </section>
+
+    <section class="error-state" id="grid-error" hidden role="alert">
+      <h2>Creators could not load.</h2>
+      <p>Check your connection and try again.</p>
+      <button class="button button-secondary" id="directory-retry" type="button">Try again</button>
+    </section>
+  </main>
+
+  <footer class="site-footer compact-footer">
+    <div class="shell footer-layout">
+      <div><a class="wordmark" href="index.html"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a><p>Creator conversations, live in your browser.</p></div>
+      <nav aria-label="Footer navigation"><a href="index.html">Home</a><a href="how-it-works.html">How it works</a><a href="pricing.html">Pricing</a><a href="request-creator.html">Request a creator</a></nav>
+      <nav aria-label="Legal and support"><a href="safety.html">Safety</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script src="public.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Local microphone, VAD and pipecat test scripts only.
+# Not installed on the production VM.
+pipecat-ai
+pyaudio

@@ -1,6 +1,10 @@
 import time
 from dataclasses import dataclass, field
 
+import structlog
+
+log = structlog.get_logger()
+
 
 @dataclass
 class CallLatencyTracker:
@@ -78,72 +82,38 @@ class CallLatencyTracker:
         return f"{value:.0f} ms"
 
     def print_report(self) -> None:
-        """Print a readable latency report for the caller turn."""
+        """Log a structured latency report for the caller turn."""
 
-        transcript_to_phrase = (
-            self._milliseconds_between(
-                self.transcript_committed_at,
-                self.first_phrase_received_at,
-            )
+        log.info(
+            "latency_report",
+            transcript_to_phrase=self._format_latency(
+                self._milliseconds_between(
+                    self.transcript_committed_at,
+                    self.first_phrase_received_at,
+                )
+            ),
+            phrase_to_cartesia=self._format_latency(
+                self._milliseconds_between(
+                    self.first_phrase_received_at,
+                    self.first_cartesia_audio_at,
+                )
+            ),
+            cartesia_to_twilio=self._format_latency(
+                self._milliseconds_between(
+                    self.first_cartesia_audio_at,
+                    self.first_twilio_audio_sent_at,
+                )
+            ),
+            transcript_to_twilio=self._format_latency(
+                self._milliseconds_between(
+                    self.transcript_committed_at,
+                    self.first_twilio_audio_sent_at,
+                )
+            ),
+            total=self._format_latency(
+                self._milliseconds_between(
+                    self.transcript_committed_at,
+                    self.response_completed_at,
+                )
+            ),
         )
-
-        phrase_to_cartesia = (
-            self._milliseconds_between(
-                self.first_phrase_received_at,
-                self.first_cartesia_audio_at,
-            )
-        )
-
-        cartesia_to_twilio = (
-            self._milliseconds_between(
-                self.first_cartesia_audio_at,
-                self.first_twilio_audio_sent_at,
-            )
-        )
-
-        transcript_to_twilio = (
-            self._milliseconds_between(
-                self.transcript_committed_at,
-                self.first_twilio_audio_sent_at,
-            )
-        )
-
-        total_response = (
-            self._milliseconds_between(
-                self.transcript_committed_at,
-                self.response_completed_at,
-            )
-        )
-
-        print("")
-        print("=" * 60)
-        print("[LATENCY] CALL TURN REPORT")
-        print("=" * 60)
-
-        print(
-            "[LATENCY] Transcript → Groq first phrase: "
-            f"{self._format_latency(transcript_to_phrase)}"
-        )
-
-        print(
-            "[LATENCY] Groq phrase → Cartesia audio: "
-            f"{self._format_latency(phrase_to_cartesia)}"
-        )
-
-        print(
-            "[LATENCY] Cartesia audio → Twilio send: "
-            f"{self._format_latency(cartesia_to_twilio)}"
-        )
-
-        print(
-            "[LATENCY] Transcript → first Twilio audio: "
-            f"{self._format_latency(transcript_to_twilio)}"
-        )
-
-        print(
-            "[LATENCY] Complete response time: "
-            f"{self._format_latency(total_response)}"
-        )
-
-        print("=" * 60)
-        print("")

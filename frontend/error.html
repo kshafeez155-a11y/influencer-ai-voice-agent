@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Error — TAC Voice</title>
+<link rel="stylesheet" href="styles.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-lowest":"#120e08","surface-container-low":"#1f1b15","surface-container":"#241f19","surface-container-high":"#2e2923","surface-container-highest":"#39342d","surface":"#17130d","surface-dim":"#17130d","surface-bright":"#3e3831","surface-variant":"#39342d","on-surface":"#ebe1d7","on-surface-variant":"#cbc6bc","on-background":"#ebe1d7","background":"#17130d","primary":"#ffffff","on-primary":"#32302b","primary-container":"#e7e2da","on-primary-container":"#67645e","secondary":"#ffb4a2","on-secondary":"#611200","secondary-container":"#ff562a","on-secondary-container":"#550f00","tertiary":"#ffffff","outline":"#949088","outline-variant":"#49473f","error":"#ffb4ab","inverse-surface":"#ebe1d7","inverse-on-surface":"#353029"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"stack-sm":"8px","stack-md":"24px","stack-lg":"64px","margin-main":"40px",gutter:"16px"},fontFamily:{"body-md":["Inter Tight"],"display-xl":["Instrument Serif"],"headline-lg":["Instrument Serif"],"headline-lg-mobile":["Instrument Serif"],"display-xl-mobile":["Instrument Serif"],"label-mono":["JetBrains Mono"]},fontSize:{"body-md":["15px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"400"}],"display-xl":["80px",{lineHeight:"88px",letterSpacing:"-0.02em",fontWeight:"400"}],"label-mono":["13px",{lineHeight:"16px",letterSpacing:"0.04em",fontWeight:"500"}],"headline-lg":["48px",{lineHeight:"56px",letterSpacing:"-0.02em",fontWeight:"400"}],"display-xl-mobile":["48px",{lineHeight:"52px",letterSpacing:"-0.02em",fontWeight:"400"}],"headline-lg-mobile":["32px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"400"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body data-page="error" class="bg-surface-container-lowest font-body-md text-on-surface antialiased">
+<main class="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
+<div class="flex flex-col w-full h-full justify-center pl-[8.33%] pr-[50%]">
+<div class="flex flex-col items-start gap-stack-md relative max-w-2xl">
+<!-- Error Label -->
+<span class="font-label-mono text-label-mono text-on-surface uppercase tracking-[0.04em]">
+Error Code: 500
+</span>
+<!-- Hairline Divider -->
+<div class="w-full h-px bg-[#2A2620]"></div>
+<!-- Headline -->
+<h1 class="font-display-xl text-display-xl text-on-surface">
+An unexpected error occurred.
+</h1>
+<!-- Return Link -->
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors duration-200 mt-stack-sm relative group" href="index.html">
+Return to home
+<span class="absolute left-0 bottom-0 w-full h-px bg-on-surface-variant group-hover:bg-on-surface transition-colors duration-200"></span>
+</a>
+</div>
+</div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

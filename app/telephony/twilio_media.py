@@ -2,14 +2,19 @@ import asyncio
 import json
 from urllib.parse import urlencode
 
+import structlog
 from fastapi import WebSocket, WebSocketDisconnect
 from websockets.asyncio.client import connect
 
 from app.core.settings import get_settings
+from app.db.database import get_database
 from app.telephony.twilio_voice_agent import (
     TwilioVoiceAgent,
     TwilioVoiceAgentError,
+    compose_system_prompt,
 )
+
+log = structlog.get_logger()
 
 
 class TwilioTranscriptionError(RuntimeError):
@@ -63,10 +68,7 @@ async def receive_elevenlabs_transcripts(
         )
 
         if message_type == "session_started":
-            print(
-                "[TWILIO STT] ElevenLabs "
-                "session started"
-            )
+            log.info("stt_session_started")
             continue
 
         if message_type == "partial_transcript":
@@ -75,11 +77,7 @@ async def receive_elevenlabs_transcripts(
             ).strip()
 
             if text:
-                print(
-                    f"\r[TWILIO STT] Partial: {text}",
-                    end="",
-                    flush=True,
-                )
+                log.debug("stt_partial", text=text)
 
                 if (
                     voice_agent.can_be_interrupted()
@@ -91,22 +89,21 @@ async def receive_elevenlabs_transcripts(
 
             continue
 
-        if message_type in {
-            "committed_transcript",
-            "committed_transcript_with_timestamps",
-        }:
+        # ElevenLabs sends the timestamp-enriched event as a delayed companion
+        # to the authoritative committed event. Treating both as turns causes
+        # duplicated user speech and duplicated model responses.
+        if message_type == "committed_transcript_with_timestamps":
+            continue
+
+        if message_type == "committed_transcript":
             text = str(
                 data.get("text", "")
             ).strip()
 
-            print("")
-
             caller_speech_detected = False
 
             if text:
-                print(
-                    f"[TWILIO STT] Committed: {text}"
-                )
+                log.info("stt_committed", text=text)
 
                 await transcript_queue.put(
                     text
@@ -161,9 +158,10 @@ async def process_caller_transcripts(
             )
 
         except Exception as error:
-            print(
-                "[PHONE AGENT] Response failed: "
-                f"{type(error).__name__}: {error}"
+            log.error(
+                "response_failed",
+                error=str(error),
+                error_type=type(error).__name__,
             )
 
 
@@ -192,9 +190,7 @@ async def forward_twilio_audio(
         )
 
         if event == "connected":
-            print(
-                "[TWILIO] WebSocket protocol connected"
-            )
+            log.info("twilio_ws_connected")
             continue
 
         if event == "start":
@@ -221,27 +217,24 @@ async def forward_twilio_audio(
                 stream_sid
             )
 
+            if voice_agent.greeting_requested:
+                voice_agent.greeting_task = (
+                    asyncio.create_task(
+                        voice_agent.greet()
+                    )
+                )
+
             media_format = start_data.get(
                 "mediaFormat",
                 {},
             )
 
-            print("[TWILIO] Stream started")
-            print(
-                f"[TWILIO] Stream SID: "
-                f"{stream_sid}"
-            )
-            print(
-                f"[TWILIO] Call SID: "
-                f"{call_sid}"
-            )
-            print(
-                "[TWILIO] Encoding: "
-                f"{media_format.get('encoding')}"
-            )
-            print(
-                "[TWILIO] Sample rate: "
-                f"{media_format.get('sampleRate')}"
+            log.info(
+                "twilio_stream_started",
+                stream_sid=stream_sid,
+                call_sid=call_sid,
+                encoding=media_format.get("encoding"),
+                sample_rate=media_format.get("sampleRate"),
             )
             continue
 
@@ -272,16 +265,10 @@ async def forward_twilio_audio(
                 )
 
             if packet_count == 1:
-                print(
-                    "[TWILIO] First packet "
-                    "forwarded to ElevenLabs"
-                )
+                log.info("first_audio_packet_forwarded")
 
             if packet_count % 100 == 0:
-                print(
-                    f"[TWILIO] Forwarded "
-                    f"{packet_count} packets"
-                )
+                log.debug("audio_packets_forwarded", count=packet_count)
 
             continue
 
@@ -296,10 +283,7 @@ async def forward_twilio_audio(
                 )
             )
 
-            print(
-                f"[TWILIO] Playback mark: "
-                f"{mark_name}"
-            )
+            log.debug("playback_mark", mark=mark_name)
 
             voice_agent.handle_playback_mark(
                 mark_name
@@ -308,9 +292,7 @@ async def forward_twilio_audio(
             continue
 
         if event == "stop":
-            print(
-                "[TWILIO] Stream stopped"
-            )
+            log.info("twilio_stream_stopped")
             break
 
     return (
@@ -346,19 +328,65 @@ async def handle_twilio_media_stream(
 
     await websocket.accept()
 
-    print("")
-    print("=" * 72)
-    print(
-        "[TWILIO] PHONE AI WITH BARGE-IN CONNECTED"
-    )
-    print("=" * 72)
+    log.info("phone_ai_connected")
+
+    # Resolve the persona from the Stream URL query params
+    # (injected by /twilio/voice from the call webhook).
+    query_params = websocket.query_params
+
+    influencer = None
+    influencer_param = str(
+        query_params.get("influencer", "")
+    ).strip()
+
+    if influencer_param.isdigit():
+        influencer = get_database().get_influencer(
+            int(influencer_param)
+        )
+
+    caller_name = str(
+        query_params.get("name", "")
+    ).strip()
+
+    if influencer is not None:
+        log.info(
+            "persona_loaded",
+            name=influencer["name"],
+            id=influencer["id"],
+        )
+    else:
+        log.info("persona_default")
 
     transcript_queue: asyncio.Queue[
         str | None
     ] = asyncio.Queue()
 
     voice_agent = TwilioVoiceAgent(
-        twilio_websocket=websocket
+        twilio_websocket=websocket,
+        system_prompt=compose_system_prompt(
+            influencer=influencer,
+        ),
+        voice_id=(
+            influencer["voice_id"]
+            if influencer is not None
+            else None
+        ),
+        influencer_name=(
+            influencer["name"]
+            if influencer is not None
+            else ""
+        ),
+        caller_name=caller_name,
+        language=(
+            influencer.get("primary_language", "en")
+            if influencer is not None else "en"
+        ),
+        knowledge_provider=(
+            lambda query: get_database().retrieve_creator_knowledge(
+                influencer["id"], query
+            )
+            if influencer is not None else ""
+        ),
     )
 
     elevenlabs_url = (
@@ -386,10 +414,7 @@ async def handle_twilio_media_stream(
             close_timeout=10,
             max_size=4 * 1024 * 1024,
         ) as elevenlabs_websocket:
-            print(
-                "[TWILIO STT] ElevenLabs "
-                "WebSocket connected"
-            )
+            log.info("elevenlabs_ws_connected")
 
             transcript_receiver_task = (
                 asyncio.create_task(
@@ -423,23 +448,19 @@ async def handle_twilio_media_stream(
             )
 
     except WebSocketDisconnect:
-        print(
-            "[TWILIO] Phone WebSocket disconnected"
-        )
+        log.info("twilio_ws_disconnected")
 
     except (
         TwilioTranscriptionError,
         TwilioVoiceAgentError,
     ) as error:
-        print(
-            f"[TWILIO] Voice agent error: "
-            f"{error}"
-        )
+        log.error("voice_agent_error", error=str(error))
 
     except Exception as error:
-        print(
-            "[TWILIO] Phone pipeline error: "
-            f"{type(error).__name__}: {error}"
+        log.error(
+            "pipeline_error",
+            error=str(error),
+            error_type=type(error).__name__,
         )
 
     finally:
@@ -450,6 +471,7 @@ async def handle_twilio_media_stream(
         tasks = [
             transcript_receiver_task,
             response_worker_task,
+            voice_agent.greeting_task,
         ]
 
         for task in tasks:
@@ -464,18 +486,9 @@ async def handle_twilio_media_stream(
                 except asyncio.CancelledError:
                     pass
 
-        print("")
-        print(
-            f"[TWILIO] Total audio packets: "
-            f"{packet_count}"
+        log.info(
+            "call_ended",
+            packets=packet_count,
+            stream_sid=stream_sid or "unknown",
+            call_sid=call_sid or "unknown",
         )
-        print(
-            f"[TWILIO] Stream SID: "
-            f"{stream_sid or 'unknown'}"
-        )
-        print(
-            f"[TWILIO] Call SID: "
-            f"{call_sid or 'unknown'}"
-        )
-        print("=" * 72)
-        print("")

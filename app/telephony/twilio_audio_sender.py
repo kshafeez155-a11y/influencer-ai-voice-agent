@@ -2,7 +2,10 @@ import base64
 import json
 import time
 
+import structlog
 from fastapi import WebSocket
+
+log = structlog.get_logger()
 
 
 class TwilioAudioSenderError(RuntimeError):
@@ -53,9 +56,7 @@ class TwilioAudioSender:
             return True
 
         if self.interruption_event.is_set():
-            print(
-                "[TWILIO AUDIO] Chunk discarded after interruption"
-            )
+            log.debug("chunk_discarded_after_interruption")
             return False
 
         encoded_audio = base64.b64encode(
@@ -118,16 +119,10 @@ class TwilioAudioSender:
 
         await self.send_mark()
 
-        print(
-            "[TWILIO AUDIO] Buffered audio sent"
-        )
-        print(
-            f"[TWILIO AUDIO] Chunks: "
-            f"{self.total_chunks_sent}"
-        )
-        print(
-            f"[TWILIO AUDIO] Bytes: "
-            f"{self.total_bytes_sent}"
+        log.info(
+            "buffered_audio_sent",
+            chunks=self.total_chunks_sent,
+            bytes=self.total_bytes_sent,
         )
 
         return True
@@ -163,8 +158,6 @@ class TwilioAudioSender:
             json.dumps(mark_message)
         )
 
-        print(
-            f"[TWILIO AUDIO] Mark sent: {mark_name}"
-        )
+        log.debug("mark_sent", mark=mark_name)
 
         return mark_name

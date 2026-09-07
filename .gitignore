@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+deploy/voice-agent.env
 
 # Python
 .venv/
@@ -23,3 +24,13 @@ output/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Flutter / Android generated artifacts
+frontend/influencer_voice_app/.dart_tool/
+frontend/influencer_voice_app/build/
+frontend/influencer_voice_app/voice-chat.apk
+frontend/influencer_voice_app/android/.gradle/
+frontend/influencer_voice_app/.flutter-plugins*
+
+voice_agent.db
+

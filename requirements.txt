@@ -1,13 +1,16 @@
 fastapi
 uvicorn[standard]
+# Pinned: some newer anyio releases ship a broken/missing
+# anyio._backends package that crashes FastAPI request handling.
+anyio==4.14.2
 python-dotenv
 pydantic
 pydantic-settings
 httpx
 websockets
-structloggroq
+structlog
+groq
 elevenlabs
 cartesia[websockets]
-pipecat-ai
-pyaudio
+python-multipart
 twilio

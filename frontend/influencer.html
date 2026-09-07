@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Talk with this creator's AI voice live in your browser.">
+  <meta name="theme-color" content="#F7F8FA">
+  <title>Creator profile — TAC Voice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public.css">
+</head>
+<body data-public-page="profile">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header profile-header">
+    <div class="shell nav-shell">
+      <a class="back-link" href="influencers.html" aria-label="Back to creators"><span aria-hidden="true">←</span> Creators</a>
+      <a class="wordmark wordmark-center" href="index.html" aria-label="TAC Voice home"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a>
+      <button class="share-button" id="share-profile" type="button"><span aria-hidden="true">↗</span> Share</button>
+    </div>
+  </header>
+
+  <main id="main" class="profile-page shell">
+    <section class="profile-loading" id="profile-loading" aria-live="polite">
+      <div class="profile-loading-avatar"></div>
+      <div><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="profile-error error-state" id="profile-error" hidden role="alert">
+      <div class="empty-avatar" aria-hidden="true">?</div>
+      <h1>This creator could not load.</h1>
+      <p>The link may be outdated, or the connection may have dropped.</p>
+      <a class="button button-primary" href="influencers.html">Explore other creators</a>
+    </section>
+
+    <div class="profile-layout" id="profile-content" hidden>
+      <article class="profile-story">
+        <div class="profile-identity">
+          <div class="profile-portrait-wrap">
+            <span class="profile-ring ring-one" aria-hidden="true"></span>
+            <span class="profile-ring ring-two" aria-hidden="true"></span>
+            <div class="profile-portrait avatar-fallback" id="profile-avatar"><span>TC</span></div>
+            <span class="voice-pulse profile-pulse" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+          <div class="profile-title">
+            <div class="demo-label"><span aria-hidden="true">AI</span> <span id="profile-kind">AI creator</span></div>
+            <h1 id="profile-name">Creator</h1>
+            <p id="profile-tagline">Loading profile…</p>
+            <div class="profile-languages" id="profile-languages" aria-label="Conversation languages"></div>
+          </div>
+        </div>
+
+        <section class="preview-panel" aria-labelledby="preview-title">
+          <div>
+            <p class="section-context">Hear before you call</p>
+            <h2 id="preview-title">Voice sample</h2>
+            <p id="preview-note">A voice sample has not been published for this demo persona yet.</p>
+          </div>
+          <button class="round-play" id="profile-preview" type="button" disabled aria-label="Voice sample unavailable"><span aria-hidden="true">▶</span></button>
+        </section>
+
+        <section class="conversation-section" aria-labelledby="conversation-title">
+          <p class="section-context">Need an opener?</p>
+          <h2 id="conversation-title">Try asking…</h2>
+          <div class="prompt-list" id="conversation-prompts"></div>
+        </section>
+
+      </article>
+
+      <aside class="call-sheet" id="call-card" aria-labelledby="call-title">
+        <div class="call-sheet-heading">
+          <div>
+            <p class="section-context">Ready when you are</p>
+            <h2 id="call-title">Talk with <span id="call-name">this creator</span> here</h2>
+          </div>
+          <span class="availability-badge checking" id="call-availability">Checking availability</span>
+        </div>
+
+        <ul class="call-facts" aria-label="Call details">
+          <li><strong>In your browser</strong><span>no phone number</span></li>
+          <li><strong id="call-limit-label">Up to 5 min</strong><span>to talk</span></li>
+          <li><strong>Microphone</strong><span>required</span></li>
+        </ul>
+
+        <div id="web-call-pre">
+          <form id="web-call-form" novalidate>
+            <div class="field">
+              <label for="user-name">What should they call you? <span>Optional</span></label>
+              <input id="user-name" name="user_name" type="text" maxlength="80" autocomplete="name" placeholder="Sam">
+            </div>
+            <label class="consent-row" for="web-call-consent">
+              <input id="web-call-consent" type="checkbox" aria-describedby="web-consent-error" required>
+              <span>I agree to a clearly disclosed AI conversation. My microphone audio will be processed live so the AI can respond.</span>
+            </label>
+            <p class="field-error" id="web-consent-error" hidden>Agree to microphone processing before starting.</p>
+            <button class="button button-primary call-submit" id="web-call-start" type="submit">
+              <span class="btn-label">Start web call</span><span aria-hidden="true">→</span>
+            </button>
+            <p class="call-privacy">Your browser will ask for microphone access. Use headphones for the clearest conversation. End anytime.</p>
+          </form>
+          <p class="result-box error" id="web-call-unsupported" hidden>This browser cannot start live audio. Try a current version of Chrome, Safari, Firefox, or Edge.</p>
+        </div>
+
+        <section class="web-call-live" id="web-call-live" data-state="connecting" aria-live="polite" hidden>
+          <div class="web-call-orb" id="web-call-orb" data-state="connecting" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <p class="web-call-status" id="web-call-status">Connecting securely</p>
+          <time class="web-call-timer" id="web-call-timer">00:00</time>
+          <div class="web-call-transcript" id="web-call-transcript" aria-label="Live conversation transcript">
+            <p class="transcript-empty">The conversation will appear here as you talk.</p>
+          </div>
+          <p class="result-box error" id="web-call-error" hidden></p>
+          <div class="web-call-controls">
+            <button class="call-control-button mute" id="web-call-mute" type="button" aria-pressed="false"><span aria-hidden="true">◉</span><span>Mute</span></button>
+            <button class="call-control-button end" id="web-call-end" type="button"><span aria-hidden="true">×</span><span>End</span></button>
+          </div>
+          <button class="button button-secondary web-call-again" id="web-call-again" type="button" hidden>Start another call</button>
+        </section>
+      </aside>
+
+      <section class="about-section" aria-labelledby="about-title">
+        <p class="section-context">About this demo persona</p>
+        <h2 id="about-title">The person behind the conversation</h2>
+        <p id="profile-bio"></p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer compact-footer">
+    <div class="shell footer-layout">
+      <div><a class="wordmark" href="index.html"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a><p>Creator conversations, live in your browser.</p></div>
+      <nav aria-label="Footer navigation"><a href="index.html">Home</a><a href="influencers.html">Explore creators</a><a href="pricing.html">Pricing</a><a href="for-creators.html">For creators</a></nav>
+      <nav aria-label="Legal and support"><a href="safety.html">Safety</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script src="web-call.js"></script>
+  <script src="public.js"></script>
+</body>
+</html>

@@ -1,4 +1,7 @@
-from fastapi import APIRouter, HTTPException, Response
+from urllib.parse import quote
+
+import structlog
+from fastapi import APIRouter, Depends, HTTPException, Response
 from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client
 from twilio.twiml.voice_response import (
@@ -8,6 +11,10 @@ from twilio.twiml.voice_response import (
 )
 
 from app.core.settings import get_settings
+from app.db.database import get_database
+from app.api.influencers import require_admin
+
+log = structlog.get_logger()
 
 
 router = APIRouter(
@@ -17,10 +24,24 @@ router = APIRouter(
 
 
 @router.post("/voice")
-async def twilio_voice() -> Response:
+async def twilio_voice(
+    influencer: str = "",
+    name: str = "",
+) -> Response:
     """Connect an inbound or outbound call to our media stream."""
 
     settings = get_settings()
+
+    if settings.call_mode.strip().lower() != "twilio":
+        paused_response = VoiceResponse()
+        paused_response.say(
+            "Phone calling is temporarily paused. Please use the web call instead."
+        )
+        return Response(
+            content=str(paused_response),
+            media_type="application/xml",
+            status_code=503,
+        )
 
     public_base_url = (
         settings.public_base_url
@@ -40,6 +61,30 @@ async def twilio_voice() -> Response:
             status_code=500,
         )
 
+    # Optional persona: when a call webhook carries ?influencer=<id>,
+    # the id is forwarded into the Stream URL so the media-stream
+    # WebSocket handler can load the right voice + system prompt.
+    influencer_id = influencer.strip()
+    caller_name = name.strip()
+    influencer_record = None
+
+    if influencer_id:
+        if influencer_id.isdigit():
+            influencer_record = get_database().get_influencer(
+                int(influencer_id)
+            )
+
+        if influencer_record is None:
+            unavailable_response = VoiceResponse()
+            unavailable_response.say(
+                "The voice you requested is currently unavailable."
+            )
+
+            return Response(
+                content=str(unavailable_response),
+                media_type="application/xml",
+            )
+
     websocket_base_url = public_base_url.replace(
         "https://",
         "wss://",
@@ -49,6 +94,12 @@ async def twilio_voice() -> Response:
     websocket_url = (
         f"{websocket_base_url}/twilio/media-stream"
     )
+
+    if influencer_record is not None:
+        websocket_url += (
+            f"?influencer={influencer_record['id']}"
+            f"&name={quote(caller_name)}"
+        )
 
     response = VoiceResponse()
 
@@ -65,11 +116,17 @@ async def twilio_voice() -> Response:
     )
 
 
-@router.post("/make-call")
+@router.post("/make-call", dependencies=[Depends(require_admin)])
 async def make_test_call() -> dict[str, str]:
     """Ask Twilio to call the verified Indian test number."""
 
     settings = get_settings()
+
+    if settings.call_mode.strip().lower() != "twilio":
+        raise HTTPException(
+            status_code=503,
+            detail="Twilio calls are paused while web calls are active.",
+        )
 
     account_sid = settings.twilio_account_sid.strip()
     auth_token = settings.twilio_auth_token.strip()
@@ -143,12 +200,12 @@ async def make_test_call() -> dict[str, str]:
             ),
         ) from error
 
-    print("")
-    print("[TWILIO] Outbound call requested")
-    print(f"[TWILIO] To: {to_number}")
-    print(f"[TWILIO] From: {from_number}")
-    print(f"[TWILIO] Call SID: {call.sid}")
-    print("")
+    log.info(
+        "test_call_requested",
+        to=to_number,
+        from_=from_number,
+        call_sid=call.sid,
+    )
 
     return {
         "ok": "true",

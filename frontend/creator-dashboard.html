@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#F7F8FA">
+  <title>Creator backstage — TAC Voice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="public.css">
+</head>
+<body data-auth-page="creator">
+  <header class="site-header"><div class="shell nav-shell"><a class="wordmark" href="index.html"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a><span class="backstage-label">Creator backstage</span><nav class="desktop-nav"><a href="account.html">My account</a><a href="influencers.html">Explore</a></nav><button class="nav-action nav-button" id="logout-button" type="button">Sign out</button></div></header>
+  <main class="creator-backstage shell">
+    <p class="page-loading" id="creator-loading">Opening backstage…</p>
+    <div id="creator-content" hidden>
+      <section class="backstage-intro"><div><p class="section-context">Your voice on TAC</p><h1 id="creator-greeting">Hi.</h1><p>Shape what fans see and what your AI knows. New profiles go live only after identity and safety review.</p></div><div class="creator-account-chip"><span id="creator-email"></span><button class="button button-secondary" id="publish-button" type="button" data-published="false">Submit for review</button></div></section>
+      <p class="auth-message backstage-message" id="creator-message" role="status" hidden></p>
+      <section class="creator-stats" aria-label="Call summary"><article><span>Calls</span><strong id="stat-calls">0</strong><small>all time</small></article><article><span>Minutes together</span><strong id="stat-minutes">0</strong><small>rounded up</small></article><article><span>Finished calls</span><strong id="stat-finished">—</strong><small>connection health</small></article></section>
+      <section class="voice-booth" aria-labelledby="voice-booth-title">
+        <div class="voice-booth-heading"><div><p class="section-context">Voice booth</p><h2 id="voice-booth-title">Make it sound like you.</h2><p>Record one clean take. Your custom voice will replace the house voice in new conversations.</p></div><span class="voice-state" id="voice-state">Checking voice…</span></div>
+        <div class="voice-booth-grid">
+          <div class="voice-take" aria-hidden="true"><span>TAKE 01</span><div class="voice-take-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><small>5–30 seconds · quiet room · one speaker</small></div>
+          <form id="voice-clone-form" class="voice-clone-form">
+            <div class="voice-form-row"><div class="field"><label for="voice-language">Main language</label><select id="voice-language"><option value="en">English</option><option value="hi">Hindi</option><option value="bn">Bengali</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="gu">Gujarati</option><option value="kn">Kannada</option><option value="ml">Malayalam</option><option value="mr">Marathi</option><option value="pa">Punjabi</option></select></div><div class="field voice-file-field"><label for="voice-clip">Voice sample</label><input id="voice-clip" type="file" accept="audio/wav,audio/x-wav,audio/mpeg,audio/mp4,audio/x-m4a,audio/flac,audio/ogg,audio/aac,audio/opus,audio/webm" required><span id="voice-file-name">Choose WAV, MP3, M4A, FLAC, OGG or WebM</span></div></div>
+            <audio id="voice-clip-preview" controls hidden></audio>
+            <label class="consent-check"><input id="voice-rights" type="checkbox"><span>I confirm this is my voice, or I have documented permission from the speaker to create and use this clone.</span></label>
+            <label class="consent-check"><input id="voice-synthetic" type="checkbox"><span>I understand TAC will generate synthetic speech with this voice and disclose that fans are speaking with an AI.</span></label>
+            <div class="voice-clone-actions"><button class="button button-primary" id="voice-clone-button" type="submit">Create my voice</button><p id="voice-clone-status" role="status">The uploaded sample is sent to Cartesia for cloning and is not retained by TAC.</p></div>
+          </form>
+        </div>
+        <div class="voice-locked" id="voice-locked" hidden><strong>Voice cloning unlocks after identity review.</strong><span>Finish your profile and submit it for review. This protects creators from unauthorised impersonation.</span></div>
+      </section>
+      <div class="backstage-grid">
+        <section class="backstage-editor">
+          <div class="card-heading"><div><p class="section-context">Public profile</p><h2>What fans meet</h2></div><span>Autosave is off</span></div>
+          <form id="creator-profile-form" class="creator-profile-form">
+            <div class="field"><label for="profile-name-input">Creator name</label><input id="profile-name-input" minlength="2" maxlength="80" required></div>
+            <div class="field"><label for="profile-tagline-input">One-line introduction</label><input id="profile-tagline-input" maxlength="140" placeholder="What should someone call you about?"></div>
+            <div class="field"><label for="profile-bio-input">About you</label><textarea id="profile-bio-input" maxlength="2000" rows="6" placeholder="Share your experience, point of view, and the topics you can help with."></textarea></div>
+            <div class="field"><label for="profile-avatar-input">Profile photo URL <span>https only</span></label><input id="profile-avatar-input" type="url" maxlength="500" placeholder="https://…"></div>
+            <div class="field"><label for="profile-language-input">Primary conversation language</label><select id="profile-language-input"><option value="en">English</option><option value="hi">Hindi</option><option value="bn">Bengali</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="gu">Gujarati</option><option value="kn">Kannada</option><option value="ml">Malayalam</option><option value="mr">Marathi</option><option value="pa">Punjabi</option></select></div>
+            <fieldset class="creator-language-set"><legend>Languages shown on your profile</legend><div><label><input type="checkbox" name="profile-language" value="en"> English</label><label><input type="checkbox" name="profile-language" value="hi"> Hindi</label><label><input type="checkbox" name="profile-language" value="bn"> Bengali</label><label><input type="checkbox" name="profile-language" value="ta"> Tamil</label><label><input type="checkbox" name="profile-language" value="te"> Telugu</label><label><input type="checkbox" name="profile-language" value="gu"> Gujarati</label><label><input type="checkbox" name="profile-language" value="kn"> Kannada</label><label><input type="checkbox" name="profile-language" value="ml"> Malayalam</label><label><input type="checkbox" name="profile-language" value="mr"> Marathi</label><label><input type="checkbox" name="profile-language" value="pa"> Punjabi</label></div></fieldset>
+            <div class="prompt-field"><div><label for="profile-prompt-input">Conversation guide</label><span>Private</span></div><p>Tell the AI how to sound, what it should know, and which boundaries it must keep.</p><textarea id="profile-prompt-input" maxlength="4000" rows="8" placeholder="Speak warmly and practically. Keep answers short. Never claim…"></textarea></div>
+            <button class="button button-primary" id="save-profile" type="submit">Save changes</button>
+          </form>
+        </section>
+        <aside class="creator-preview-card" aria-label="Live profile preview"><div class="preview-browser-bar"><i></i><i></i><i></i><span>Profile preview</span></div><div class="creator-preview-stage"><span class="preview-status" id="preview-status">Private draft</span><div class="preview-avatar" id="preview-avatar">T</div><p>AI voice creator</p><h2 id="preview-name">Your name</h2><span id="preview-tagline">Add a short reason to call you.</span><div class="preview-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div><a class="button button-secondary" id="view-public-profile" href="#" hidden>Open public profile</a></div></aside>
+      </div>
+      <section class="creator-recent"><div class="card-heading"><div><p class="section-context">Conversation receipts</p><h2>Recent calls</h2></div><span>No transcripts or recordings shown</span></div><p class="empty-copy" id="creator-empty" hidden>Your first fan call will appear here with its time and duration.</p><ul class="receipt-list" id="creator-calls"></ul></section>
+    </div>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

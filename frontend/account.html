@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#F7F8FA">
+  <title>Your account — TAC Voice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="public.css">
+</head>
+<body data-auth-page="account">
+  <header class="site-header"><div class="shell nav-shell"><a class="wordmark" href="index.html"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a><nav class="desktop-nav"><a href="influencers.html">Explore creators</a><a id="creator-dashboard-link" href="creator-dashboard.html" hidden>Creator backstage</a></nav><button class="nav-action nav-button" id="logout-button" type="button">Sign out</button></div></header>
+  <main class="account-page shell">
+    <p class="page-loading" id="account-loading">Opening your account…</p>
+    <div id="account-content" hidden>
+      <section class="account-identity"><span class="account-avatar" id="account-avatar">T</span><div><p class="section-context">Your TAC account</p><h1 id="account-name">Your name</h1><p id="account-email"></p></div><a class="button button-primary" href="influencers.html">Start a call →</a></section>
+      <div class="account-grid">
+        <section class="account-card"><div class="card-heading"><div><p class="section-context">Call history</p><h2>Your conversations</h2></div></div><p class="empty-copy" id="account-empty" hidden>No calls here yet. Choose a creator and your next signed-in call will appear here.</p><ul class="receipt-list" id="account-calls"></ul></section>
+        <section class="account-card"><p class="section-context">Profile</p><h2>What creators call you</h2><form id="account-form" class="auth-form"><div class="field"><label for="display-name">Display name</label><input id="display-name" maxlength="80" required></div><p class="auth-message" id="account-message" role="status" hidden></p><button class="button button-secondary" type="submit">Save name</button></form><p class="account-privacy">Your email is used for account access. It is not shown to creators.</p></section>
+      </div>
+    </div>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

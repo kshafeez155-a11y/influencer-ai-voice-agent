@@ -1,0 +1,87 @@
+/* ============================================================
+   TAC Voice — minimal reset + Tailwind overrides
+   Bulk styling is now Tailwind classes in HTML.
+   ============================================================ */
+
+@layer base {
+  html, body { margin: 0; padding: 0; }
+  body { overscroll-behavior: none; }
+  ::-webkit-scrollbar { display: none; }
+}
+
+/* ---------- animations ---------- */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 77, 28, 0.55); }
+  70% { box-shadow: 0 0 0 9px rgba(255, 77, 28, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 77, 28, 0); }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ---------- utilities ---------- */
+.hidden { display: none !important; }
+
+/* skeleton loader */
+.sk {
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(235, 225, 215, 0.05), rgba(235, 225, 215, 0.12), rgba(235, 225, 215, 0.05));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+/* result boxes for call feedback */
+.result-box {
+  padding: 16px 20px;
+  border: 1px solid #2A2620;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+}
+.result-box.success {
+  border-color: rgba(255, 77, 28, 0.5);
+  color: #FF4D1C;
+}
+.result-box.error {
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #fca5a5;
+}
+.result-box .r-detail {
+  display: block;
+  font-size: 12px;
+  color: #6B645C;
+  margin-top: 4px;
+}
+
+/* form messages */
+.form-msg { font-size: 13px; color: #6B645C; }
+.form-msg.ok { color: #FF4D1C; }
+.form-msg.err { color: #fca5a5; }
+
+/* status tags */
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tag-ok { color: #FF4D1C; }
+.tag-warn { color: #6B645C; }
+.tag-off { color: #fca5a5; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

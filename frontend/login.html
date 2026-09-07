@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#F7F8FA">
+  <title>Sign in — TAC Voice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public.css">
+</head>
+<body data-auth-page="login">
+  <header class="site-header"><div class="shell nav-shell"><a class="wordmark" href="index.html"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a><a class="nav-action" href="signup.html">Create account</a></div></header>
+  <main class="auth-layout shell">
+    <section class="auth-story" aria-labelledby="auth-story-title">
+      <p class="section-context">Come back to the conversation</p>
+      <h1 id="auth-story-title">Your calls,<br>kept together.</h1>
+      <div class="voice-note" aria-hidden="true">
+        <span class="voice-note-avatar">PS</span>
+        <div><strong>Priya Sharma</strong><span class="voice-note-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>0:42</small></div>
+      </div>
+      <p>Sign in to see who you called and pick up where you left off. Creator accounts open directly into their backstage.</p>
+    </section>
+    <section class="auth-panel" aria-labelledby="login-title">
+      <p class="section-context">Welcome back</p>
+      <h2 id="login-title">Sign in to TAC</h2>
+      <form id="login-form" class="auth-form" novalidate>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" maxlength="128" required></div>
+        <p class="auth-message" id="auth-message" role="alert" hidden></p>
+        <button class="button button-primary auth-submit" id="auth-submit" type="submit">Sign in</button>
+      </form>
+      <p class="auth-switch">New here? <a href="signup.html">Create an account</a></p>
+      <p class="auth-fineprint">Calls still work without an account. <a href="influencers.html">Explore as a guest</a>.</p>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>

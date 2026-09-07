@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>Studio — TAC Voice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="public.css">
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body class="studio-body">
+  <a class="skip-link" href="#studio-main">Skip to Studio</a>
+  <header class="studio-topbar">
+    <a class="wordmark" href="index.html" aria-label="TAC Voice home"><span class="wordmark-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>tac</span></a>
+    <div class="studio-title"><strong>Studio</strong><span>Operator control room</span></div>
+    <div class="studio-live" id="studio-live"><i aria-hidden="true"></i><span>Checking service</span></div>
+    <button class="studio-menu" id="studio-menu" type="button" aria-controls="studio-nav" aria-expanded="false">Menu</button>
+  </header>
+
+  <div class="studio-shell">
+    <nav class="studio-nav" id="studio-nav" aria-label="Studio sections">
+      <p>Manage</p>
+      <button class="active" type="button" data-studio-tab="overview"><span>01</span>Today</button>
+      <button type="button" data-studio-tab="creators"><span>02</span>Creators</button>
+      <button type="button" data-studio-tab="voices"><span>03</span>Voices & languages</button>
+      <button type="button" data-studio-tab="users"><span>04</span>People</button>
+      <button type="button" data-studio-tab="calls"><span>05</span>Calls</button>
+      <button type="button" data-studio-tab="inbox"><span>06</span>Inbox</button>
+      <button type="button" data-studio-tab="knowledge"><span>07</span>Topics & knowledge</button>
+      <p>System</p>
+      <button type="button" data-studio-tab="audit"><span>08</span>Audit trail</button>
+      <a href="status.html"><span>09</span>Public status</a>
+      <div class="studio-nav-foot"><span>Production console</span><button id="studio-lock" type="button">Lock Studio</button></div>
+    </nav>
+
+    <main class="studio-main" id="studio-main">
+      <section class="studio-panel active" data-panel="overview">
+        <div class="studio-heading"><div><p class="section-context">What needs attention</p><h1>Keep every creator ready to talk.</h1></div><button class="button button-primary" type="button" data-open-create>Add creator</button></div>
+        <div class="attention-strip" id="attention-strip" aria-live="polite"><p>Loading today’s queue…</p></div>
+        <div class="studio-stats" id="studio-stats"></div>
+        <div class="studio-columns"><section class="studio-card"><div class="studio-card-head"><div><span>Review queue</span><h2>Creators waiting</h2></div><button class="text-button" type="button" data-jump="creators">View all</button></div><div id="overview-reviews" class="studio-list"></div></section><section class="studio-card"><div class="studio-card-head"><div><span>Latest conversations</span><h2>Call activity</h2></div><button class="text-button" type="button" data-jump="calls">View all</button></div><div id="overview-calls" class="studio-list"></div></section></div>
+      </section>
+
+      <section class="studio-panel" data-panel="creators">
+        <div class="studio-heading"><div><p class="section-context">Profiles and access</p><h1>Creators</h1><p>Review identity, publish profiles, set call limits, language and pricing.</p></div><button class="button button-primary" type="button" data-open-create>Add creator</button></div>
+        <div class="studio-toolbar"><label class="studio-search"><span class="sr-only">Search creators</span><input type="search" id="creator-search" placeholder="Search name or owner"></label><div class="filter-pills" role="group" aria-label="Filter creators"><button class="active" type="button" data-creator-filter="all">All</button><button type="button" data-creator-filter="pending">Needs review</button><button type="button" data-creator-filter="live">Live</button><button type="button" data-creator-filter="paused">Paused</button></div></div>
+        <div class="studio-table-wrap"><table class="studio-table"><thead><tr><th>Creator</th><th>Language</th><th>Voice</th><th>Calls</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="creator-rows"></tbody></table></div>
+      </section>
+
+      <section class="studio-panel" data-panel="voices">
+        <div class="studio-heading"><div><p class="section-context">Consent-backed voice assets</p><h1>Voices & languages</h1><p>Upload only rights-cleared samples. The raw file goes directly to the voice provider and is not retained by TAC.</p></div></div>
+        <div class="language-legend" id="language-legend"></div>
+        <div class="voice-grid" id="voice-grid"></div>
+      </section>
+
+      <section class="studio-panel" data-panel="users">
+        <div class="studio-heading"><div><p class="section-context">Accounts and access</p><h1>People</h1><p>Change roles, suspend accounts, and invalidate active sessions.</p></div></div>
+        <div class="studio-table-wrap"><table class="studio-table"><thead><tr><th>Account</th><th>Role</th><th>Calls</th><th>Creator</th><th>Access</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody id="user-rows"></tbody></table></div>
+      </section>
+
+      <section class="studio-panel" data-panel="calls">
+        <div class="studio-heading"><div><p class="section-context">Usage and failures</p><h1>Calls</h1><p>Web-call metadata only. TAC does not display or retain call transcripts here.</p></div></div>
+        <div class="studio-table-wrap"><table class="studio-table"><thead><tr><th>Started</th><th>Creator</th><th>Caller</th><th>Duration</th><th>Status</th><th>Error</th></tr></thead><tbody id="call-rows"></tbody></table></div>
+      </section>
+
+      <section class="studio-panel" data-panel="inbox">
+        <div class="studio-heading"><div><p class="section-context">Support, safety and rights</p><h1>Inbox</h1><p>Resolve safety reports first; mark spam instead of deleting evidence.</p></div></div>
+        <div class="inbox-grid" id="inbox-grid"></div>
+      </section>
+
+      <section class="studio-panel" data-panel="knowledge">
+        <div class="studio-heading"><div><p class="section-context">Grounded conversations</p><h1>Topics & knowledge</h1><p>Give each creator a clear scope and factual reference material. Relevant snippets are retrieved for each live turn.</p></div><label class="creator-picker">Creator<select id="knowledge-creator"></select></label></div>
+        <div class="knowledge-layout">
+          <section class="studio-card"><div class="studio-card-head"><div><span>Conversation scope</span><h2>Topics</h2></div></div><form id="topic-form" class="inline-create"><label><span>Topic name</span><input id="topic-name" maxlength="80" placeholder="Startup fundraising" required></label><label><span>What it covers</span><input id="topic-description" maxlength="500" placeholder="Early-stage preparation and founder storytelling"></label><button class="button button-primary" type="submit">Add topic</button></form><div class="knowledge-list" id="topic-list"></div></section>
+          <section class="studio-card"><div class="studio-card-head"><div><span>Retrieved during calls</span><h2>Reference notes</h2></div></div><form id="knowledge-form" class="knowledge-create"><div class="dialog-grid"><label>Source title<input id="knowledge-title" maxlength="160" placeholder="2026 coaching programme FAQ" required></label><label>Language<select id="knowledge-language"></select></label><label class="wide">Trusted information<textarea id="knowledge-content" minlength="20" maxlength="12000" rows="7" placeholder="Paste approved facts, policies, product details, or the creator’s own material. Do not paste instructions from untrusted websites." required></textarea></label></div><button class="button button-primary" type="submit">Add reference note</button><p id="knowledge-message" role="status"></p></form><div class="knowledge-list" id="knowledge-list"></div></section>
+        </div>
+      </section>
+
+      <section class="studio-panel" data-panel="audit">
+        <div class="studio-heading"><div><p class="section-context">Operator accountability</p><h1>Audit trail</h1><p>Creator, account, voice and inbox changes made through Studio.</p></div></div>
+        <div class="audit-list" id="audit-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <section class="studio-gate" id="studio-gate" aria-labelledby="gate-title">
+    <form id="studio-login" class="studio-gate-card">
+      <span class="wordmark-mark large" aria-hidden="true"><span></span><span></span><span></span></span>
+      <p class="section-context">Restricted workspace</p><h1 id="gate-title">Open TAC Studio</h1><p>Use the operator token from the production secret store. It stays in this browser until you lock Studio.</p>
+      <label for="admin-token">Operator token</label><input id="admin-token" type="password" autocomplete="current-password" required><button class="button button-primary" type="submit">Open Studio</button><p id="gate-message" class="form-result" role="status"></p>
+    </form>
+  </section>
+
+  <dialog class="studio-dialog" id="creator-dialog"><form method="dialog" class="dialog-sheet" id="creator-form"><div class="dialog-head"><div><p class="section-context">Creator control</p><h2 id="creator-dialog-title">Edit creator</h2></div><button type="button" class="dialog-close" data-close-dialog aria-label="Close">×</button></div><input type="hidden" id="edit-creator-id"><div class="dialog-grid"><label>Name<input id="edit-name" maxlength="80" required></label><label>Profile image URL<input id="edit-avatar" type="url" maxlength="500"></label><label class="wide">Tagline<input id="edit-tagline" maxlength="140"></label><label class="wide">Bio<textarea id="edit-bio" maxlength="2000" rows="4"></textarea></label><label>Primary language<select id="edit-primary-language"></select></label><label>Maximum call<select id="edit-call-limit"><option value="180">3 minutes</option><option value="300">5 minutes</option><option value="600">10 minutes</option><option value="900">15 minutes</option></select></label><fieldset class="wide language-fieldset"><legend>Languages shown on profile</legend><div id="edit-languages" class="language-checks"></div></fieldset><label>Price per minute (₹)<input id="edit-price" type="number" min="0" max="10000" step="1"></label><label>Review status<select id="edit-review"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></label><label class="wide">Creator conversation guidance<textarea id="edit-prompt" maxlength="4000" rows="5" placeholder="Topics, tone and boundaries. Platform safety rules are always applied."></textarea></label><label class="switch-row"><input id="edit-call-enabled" type="checkbox"><span>Calls available</span></label><label class="switch-row"><input id="edit-published" type="checkbox"><span>Profile published</span></label></div><div class="dialog-actions"><p id="creator-form-message" role="status"></p><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Save creator</button></div></form></dialog>
+
+  <dialog class="studio-dialog" id="voice-dialog"><form method="dialog" class="dialog-sheet compact" id="voice-form"><div class="dialog-head"><div><p class="section-context">Voice booth</p><h2 id="voice-dialog-title">Upload creator voice</h2></div><button type="button" class="dialog-close" data-close-dialog aria-label="Close">×</button></div><input type="hidden" id="voice-creator-id"><label>Voice language<select id="voice-language"></select></label><label>Clean voice sample<input id="voice-clip" type="file" accept="audio/*" required><small>5–30 seconds, one speaker, quiet room. Maximum 20 MB.</small></label><label class="consent-check"><input id="voice-rights" type="checkbox"><span>I verified that TAC and this creator have documented rights to create and use this voice.</span></label><label class="consent-check"><input id="voice-disclosure" type="checkbox"><span>I verified that synthetic voice use will be clearly disclosed to listeners.</span></label><div class="dialog-actions"><p id="voice-form-message" role="status"></p><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Create and activate voice</button></div></form></dialog>
+
+  <script src="studio.js"></script>
+</body>
+</html>

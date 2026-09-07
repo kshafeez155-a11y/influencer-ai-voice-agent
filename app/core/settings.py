@@ -40,6 +40,37 @@ class Settings(BaseSettings):
         alias="LOG_LEVEL",
     )
 
+    call_mode: str = Field(
+        default="web",
+        alias="CALL_MODE",
+    )
+
+    web_call_max_seconds: int = Field(
+        default=300,
+        alias="WEB_CALL_MAX_SECONDS",
+        ge=60,
+        le=3600,
+    )
+
+    web_call_max_concurrent: int = Field(
+        default=3,
+        alias="WEB_CALL_MAX_CONCURRENT",
+        ge=1,
+        le=100,
+    )
+
+    web_call_max_per_ip_hour: int = Field(
+        default=10,
+        alias="WEB_CALL_MAX_PER_IP_HOUR",
+        ge=1,
+        le=1000,
+    )
+
+    web_call_signing_secret: str = Field(
+        default="",
+        alias="WEB_CALL_SIGNING_SECRET",
+    )
+
     # =====================================================
     # TWILIO
     # =====================================================
@@ -101,7 +132,7 @@ class Settings(BaseSettings):
     )
 
     groq_model: str = Field(
-        default="llama-3.3-70b-versatile",
+        default="openai/gpt-oss-120b",
         alias="GROQ_MODEL",
     )
 
@@ -140,7 +171,7 @@ class Settings(BaseSettings):
 
     supabase_key: str = Field(
         default="",
-        alias="SUPABASE_KEY",
+        alias="SUPABASE_SERVICE_ROLE_KEY",
     )
 
     # =====================================================
@@ -150,6 +181,20 @@ class Settings(BaseSettings):
     redis_url: str = Field(
         default="redis://localhost:6379",
         alias="REDIS_URL",
+    )
+
+    # =====================================================
+    # DATA / ADMIN
+    # =====================================================
+
+    database_path: str = Field(
+        default="voice_agent.db",
+        alias="DATABASE_PATH",
+    )
+
+    admin_token: str = Field(
+        default="",
+        alias="ADMIN_TOKEN",
     )
 
 

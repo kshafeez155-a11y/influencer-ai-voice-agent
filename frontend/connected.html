@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Connected — TAC Voice</title>
+<link rel="stylesheet" href="styles.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-container-lowest":"#120e08","surface-container-low":"#1f1b15","surface-container":"#241f19","surface-container-high":"#2e2923","surface-container-highest":"#39342d","surface":"#17130d","surface-dim":"#17130d","surface-bright":"#3e3831","surface-variant":"#39342d","on-surface":"#ebe1d7","on-surface-variant":"#cbc6bc","on-background":"#ebe1d7","background":"#17130d","primary":"#ffffff","on-primary":"#32302b","primary-container":"#e7e2da","on-primary-container":"#67645e","secondary":"#ffb4a2","on-secondary":"#611200","secondary-container":"#ff562a","on-secondary-container":"#550f00","tertiary":"#ffffff","outline":"#949088","outline-variant":"#49473f","error":"#ffb4ab","inverse-surface":"#ebe1d7","inverse-on-surface":"#353029"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"stack-sm":"8px","stack-md":"24px","stack-lg":"64px","margin-main":"40px",gutter:"16px"},fontFamily:{"body-md":["Inter Tight"],"display-xl":["Instrument Serif"],"headline-lg":["Instrument Serif"],"headline-lg-mobile":["Instrument Serif"],"display-xl-mobile":["Instrument Serif"],"label-mono":["JetBrains Mono"]},fontSize:{"body-md":["15px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"400"}],"display-xl":["80px",{lineHeight:"88px",letterSpacing:"-0.02em",fontWeight:"400"}],"label-mono":["13px",{lineHeight:"16px",letterSpacing:"0.04em",fontWeight:"500"}],"headline-lg":["48px",{lineHeight:"56px",letterSpacing:"-0.02em",fontWeight:"400"}],"display-xl-mobile":["48px",{lineHeight:"52px",letterSpacing:"-0.02em",fontWeight:"400"}],"headline-lg-mobile":["32px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"400"}]}}}}</script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body data-page="connected" class="bg-surface-container-lowest font-body-md text-on-surface antialiased">
+<main class="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden">
+<div class="flex flex-col w-full h-full relative" style="min-height: calc(100vh - 40px);">
+
+<div class="absolute inset-0 bg-surface-container-lowest border-x border-b border-[#2A2620]"></div>
+
+<div class="relative flex-grow flex flex-col pt-32 pb-margin-main px-margin-main">
+<!-- Grid Container -->
+<div class="grid grid-cols-12 gap-gutter flex-grow">
+<!-- Pipeline Status -->
+<div class="col-span-12 mb-stack-lg">
+<div class="flex gap-4 font-label-mono text-label-mono">
+<span class="text-[#6B645C]">CONNECTING</span>
+<span class="text-[#6B645C]">&rarr;</span>
+<span class="text-[#6B645C]">RINGING</span>
+<span class="text-[#6B645C]">&rarr;</span>
+<span class="text-[#FF4D1C]">CONNECTED</span>
+</div>
+</div>
+<!-- Name & Destination -->
+<div class="col-span-12 md:col-start-2 md:col-span-7 flex flex-col justify-center">
+<h1 class="font-display-xl text-display-xl text-on-surface mb-stack-sm tracking-[-0.02em] leading-none">
+<span id="connected-name">...</span>
+</h1>
+<div class="font-label-mono text-label-mono text-[#FF4D1C]">
+<span id="connected-phone">+1 555 •••• 567</span>
+</div>
+</div>
+<!-- Audio Amplitude Waveform -->
+<div class="col-span-12 md:col-start-9 md:col-span-4 flex items-center h-full">
+<div class="w-full relative h-[60px] flex items-center justify-center">
+<!-- Base 1px Line -->
+<div class="absolute w-full h-px bg-[#2A2620]"></div>
+<!-- Animated Waveform SVG -->
+<svg class="w-full h-full absolute top-0 left-0 text-[#F5F0E8]" preserveAspectRatio="none" viewBox="0 0 200 60">
+<path d="M 0 30 Q 50 30 100 30 T 200 30" fill="transparent" id="waveform" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"></path>
+</svg>
+</div>
+</div>
+</div>
+
+<!-- Bottom Controls -->
+<div class="w-full flex justify-between items-end border-t border-[#2A2620] pt-stack-md mt-stack-lg">
+<div class="font-label-mono text-label-mono text-on-surface" id="timer">
+00:00
+</div>
+<button class="font-label-mono text-label-mono text-[#6B645C] uppercase underline hover:text-on-surface transition-colors focus:outline-none">
+End Call
+</button>
+</div>
+</div>
+
+<!-- Background Grid Lines Overlay -->
+<div class="absolute inset-0 pointer-events-none opacity-20">
+<div class="w-full h-full grid grid-cols-12 gap-gutter px-margin-main">
+<div class="col-span-1 border-x border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+<div class="col-span-1 border-r border-[#2A2620] h-full hidden md:block"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+// Timer Logic
+const timerElement = document.getElementById('timer');
+let seconds = 0;
+
+setInterval(() => {
+    seconds++;
+    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const secs = (seconds % 60).toString().padStart(2, '0');
+    timerElement.textContent = `${mins}:${secs}`;
+}, 1000);
+
+// Audio Waveform Animation
+const waveform = document.getElementById('waveform');
+let time = 0;
+
+function animateWaveform() {
+    time += 0.1;
+
+    // Complex wave combining multiple sine waves for a "talking" effect
+    const y1 = 30 + Math.sin(time) * 5 * Math.sin(time * 0.5);
+    const y2 = 30 - Math.sin(time * 1.5) * 8 * Math.cos(time * 0.3);
+    const y3 = 30 + Math.sin(time * 0.8) * 12 * Math.sin(time * 2);
+
+    // Construct path: flat ends, wavy middle
+    const d = `M 0 30 Q 25 30 50 ${y1} C 75 ${y2}, 125 ${y3}, 150 ${y2} Q 175 30 200 30`;
+
+    waveform.setAttribute('d', d);
+    requestAnimationFrame(animateWaveform);
+}
+
+animateWaveform();
+</script>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
